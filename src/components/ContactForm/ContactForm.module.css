@@ -1,0 +1,23 @@
+.formBox {
+  padding: 10px 10px;
+  border: 2px solid black;
+  width: 370px;
+}
+
+.field {
+  margin-bottom: 2px;
+}
+
+.error {
+  color: red;
+}
+
+.errorContainer {
+  min-height: 20px;
+}
+
+.error {
+  color: red;
+  font-size: 12px;
+  margin-top: 2px;
+}
