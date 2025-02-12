@@ -13,9 +13,9 @@ const initialState = {
 const slice = createSlice({
   name: "user",
   initialState,
-  extraReducers: (builder) => {
-    builder.addCase();
-  },
+  //   extraReducers: (builder) => {
+  //     builder.addCase();
+  //   },
 });
 
 export const userReducer = slice.reducer;
