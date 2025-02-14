@@ -1,11 +1,12 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, isAnyOf } from "@reduxjs/toolkit";
+import { refreshUser, logout, login, register } from "./operations";
 
 const initialState = {
   user: {
-    name: null,
-    email: null,
+    name: "",
+    email: "",
   },
-  token: null,
+  token: "",
   isLoggedIn: false,
   isRefreshing: false,
 };
@@ -13,9 +14,29 @@ const initialState = {
 const slice = createSlice({
   name: "user",
   initialState,
-  //   extraReducers: (builder) => {
-  //     builder.addCase();
-  //   },
+  extraReducers: (builder) => {
+    builder
+      .addCase(register.fulfilled, (state, action) => {
+        state.user = action.payload.user;
+        state.token = action.payload.token;
+        state.isLoggedIn = true;
+      })
+      .addCase(login.fulfilled, (state, action) => {
+        state.user = action.payload.user;
+        state.token = action.payload.token;
+        state.isLoggedIn = true;
+      })
+      .addCase(logout.fulfilled, (state) => {
+        state.user = initialState.user;
+        state.token = initialState.token;
+        state.isLoggedIn = false;
+      })
+      .addCase(refreshUser.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.isLoggedIn = true;
+        state.isRefreshing = false;
+      });
+  },
 });
 
 export const userReducer = slice.reducer;

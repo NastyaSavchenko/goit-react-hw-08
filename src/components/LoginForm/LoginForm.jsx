@@ -8,6 +8,8 @@ import Typography from "@mui/material/Typography";
 import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
+import { useDispatch } from "react-redux";
+import { login } from "../../redux/auth/operations";
 
 const validationSchema = Yup.object({
   email: Yup.string()
@@ -20,6 +22,15 @@ const validationSchema = Yup.object({
 
 const LoginForm = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleSubmit = (value, actions) => {
+    dispatch(login(value))
+      .unwrap()
+      .then(() => navigate("/contacts"));
+    actions.setSubmitting(false);
+    actions.resetForm();
+  };
 
   return (
     <Box
@@ -51,12 +62,10 @@ const LoginForm = () => {
         <Formik
           initialValues={{ email: "", password: "" }}
           validationSchema={validationSchema}
-          onSubmit={(values) => {
-            console.log("Form Submitted", values);
-          }}
+          onSubmit={handleSubmit}
         >
-          {({ errors, touched, handleChange, handleBlur, values }) => (
-            <Form noValidate style={{ width: "100%", marginTop: "24px" }}>
+          {({ errors, touched, isSubmitting }) => (
+            <Form style={{ width: "100%", marginTop: "24px" }}>
               <Field
                 as={TextField}
                 margin="normal"
@@ -65,13 +74,10 @@ const LoginForm = () => {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
-                autoFocus
-                value={values.email}
-                onChange={handleChange}
-                onBlur={handleBlur}
                 error={touched.email && Boolean(errors.email)}
                 helperText={touched.email && errors.email}
               />
+
               <Field
                 as={TextField}
                 margin="normal"
@@ -81,31 +87,26 @@ const LoginForm = () => {
                 type="password"
                 id="password"
                 autoComplete="current-password"
-                value={values.password}
-                onChange={handleChange}
-                onBlur={handleBlur}
                 error={touched.password && Boolean(errors.password)}
                 helperText={touched.password && errors.password}
               />
+
               <Button
                 type="submit"
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
+                disabled={isSubmitting}
               >
-                Sign In
+                {isSubmitting ? "Signing In..." : "Sign In"}
               </Button>
             </Form>
           )}
         </Formik>
 
         <Box sx={{ textAlign: "center", mt: 2 }}>
-          <Link
-            component="button"
-            variant="body2"
-            onClick={() => navigate("/register")}
-          >
-            {"Don't have an account? Sign Up"}
+          <Link href="/register" variant="body2">
+            Don`&apos;`t have an account? Sign Up
           </Link>
         </Box>
       </Box>

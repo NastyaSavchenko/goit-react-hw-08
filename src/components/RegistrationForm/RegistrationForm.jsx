@@ -8,6 +8,8 @@ import Typography from "@mui/material/Typography";
 import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
+import { useDispatch } from "react-redux";
+import { register } from "../../redux/auth/operations";
 
 const validationSchema = Yup.object({
   name: Yup.string()
@@ -23,6 +25,15 @@ const validationSchema = Yup.object({
 
 const RegistrationForm = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleSubmit = (values, actions) => {
+    dispatch(register(values))
+      .unwrap()
+      .then(() => navigate("/contacts"));
+    actions.setSubmitting(false);
+    actions.resetForm();
+  };
 
   return (
     <Box
@@ -54,12 +65,10 @@ const RegistrationForm = () => {
         <Formik
           initialValues={{ name: "", email: "", password: "" }}
           validationSchema={validationSchema}
-          onSubmit={(values) => {
-            console.log("Form Submitted", values);
-          }}
+          onSubmit={handleSubmit}
         >
-          {({ errors, touched, handleChange, handleBlur, values }) => (
-            <Form noValidate style={{ width: "100%", marginTop: "24px" }}>
+          {({ errors, touched, isSubmitting }) => (
+            <Form style={{ width: "100%", marginTop: "24px" }}>
               <Field
                 as={TextField}
                 margin="normal"
@@ -68,13 +77,10 @@ const RegistrationForm = () => {
                 label="Full Name"
                 name="name"
                 autoComplete="name"
-                autoFocus
-                value={values.name}
-                onChange={handleChange}
-                onBlur={handleBlur}
                 error={touched.name && Boolean(errors.name)}
                 helperText={touched.name && errors.name}
               />
+
               <Field
                 as={TextField}
                 margin="normal"
@@ -83,12 +89,10 @@ const RegistrationForm = () => {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
-                value={values.email}
-                onChange={handleChange}
-                onBlur={handleBlur}
                 error={touched.email && Boolean(errors.email)}
                 helperText={touched.email && errors.email}
               />
+
               <Field
                 as={TextField}
                 margin="normal"
@@ -98,31 +102,26 @@ const RegistrationForm = () => {
                 type="password"
                 id="password"
                 autoComplete="new-password"
-                value={values.password}
-                onChange={handleChange}
-                onBlur={handleBlur}
                 error={touched.password && Boolean(errors.password)}
                 helperText={touched.password && errors.password}
               />
+
               <Button
                 type="submit"
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
+                disabled={isSubmitting}
               >
-                Sign Up
+                {isSubmitting ? "Signing Up..." : "Sign Up"}
               </Button>
             </Form>
           )}
         </Formik>
 
         <Box sx={{ textAlign: "center", mt: 2 }}>
-          <Link
-            component="button"
-            variant="body2"
-            onClick={() => navigate("/login")}
-          >
-            {"Already have an account? Sign In"}
+          <Link href="/login" variant="body2">
+            Already have an account? Sign In
           </Link>
         </Box>
       </Box>

@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
-// import { useSelector } from "react-redux";
-// import { selectIsLoggedIn } from "../../redux/auth/selectors";
+import { useSelector } from "react-redux";
+import { isLoggedInSelector } from "../../redux/auth/selectors";
 
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -22,10 +22,9 @@ import AuthNav from "../AuthNav/AuthNav";
 
 const drawerWidth = 240;
 
-const AppBarComponent = (props) => {
-  const { window } = props;
+const AppBarComponent = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const isLoggedIn = false;
+  const isLoggedIn = useSelector(isLoggedInSelector);
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
@@ -45,7 +44,13 @@ const AppBarComponent = (props) => {
             <ListItemButton
               component={NavLink}
               to={item.path}
-              sx={{ textAlign: "center" }}
+              sx={{
+                textAlign: "center",
+                color: "#fff",
+                "&:hover": { color: "#09263e" },
+                "&.active": { color: "#09263e" },
+              }}
+              className={({ isActive }) => (isActive ? "active" : "")}
             >
               <ListItemText primary={item.name} />
             </ListItemButton>
@@ -59,13 +64,10 @@ const AppBarComponent = (props) => {
     </Box>
   );
 
-  const container =
-    window !== undefined ? () => window().document.body : undefined;
-
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <AppBar component="nav">
+      <AppBar component="nav" sx={{ bgcolor: "#2196f3" }}>
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
           <IconButton
             color="inherit"
@@ -78,11 +80,29 @@ const AppBarComponent = (props) => {
           </IconButton>
 
           <Box sx={{ display: { xs: "none", sm: "flex" }, gap: 2 }}>
-            <Button component={NavLink} to="/" sx={{ color: "#fff" }}>
+            <Button
+              component={NavLink}
+              to="/"
+              sx={{
+                color: "#fff",
+                "&:hover": { color: "#09263e" },
+                "&.active": { color: "#09263e" },
+              }}
+              className={({ isActive }) => (isActive ? "active" : "")}
+            >
               Home
             </Button>
             {isLoggedIn && (
-              <Button component={NavLink} to="/contacts" sx={{ color: "#fff" }}>
+              <Button
+                component={NavLink}
+                to="/contacts"
+                sx={{
+                  color: "#fff",
+                  "&:hover": { color: "#09263e" },
+                  "&.active": { color: "#09263e" },
+                }}
+                className={({ isActive }) => (isActive ? "active" : "")}
+              >
                 Contacts
               </Button>
             )}
@@ -96,18 +116,15 @@ const AppBarComponent = (props) => {
 
       <nav>
         <Drawer
-          container={container}
           variant="temporary"
           open={mobileOpen}
           onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true,
-          }}
           sx={{
             display: { xs: "block", sm: "none" },
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: drawerWidth,
+              bgcolor: "#2196f3",
             },
           }}
         >

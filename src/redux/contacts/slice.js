@@ -35,7 +35,7 @@ const slice = createSlice({
           addContact.pending,
           deleteContact.pending
         ),
-        (state, action) => {
+        (state) => {
           state.contacts.loading = true;
           state.contacts.error = null;
         }
