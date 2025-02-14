@@ -103,3 +103,13 @@ input:hover,
 input:focus {
   border-color: blue;
 }
+
+.container {
+  padding: 10px 20px;
+}
+
+@media screen and (max-width: 767px) {
+  .container {
+    padding: 20px 40px;
+  }
+}

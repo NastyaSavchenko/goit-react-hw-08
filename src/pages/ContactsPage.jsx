@@ -19,7 +19,7 @@ const ContactsPage = () => {
     return <h2>Loading ...</h2>;
   }
   return (
-    <div>
+    <div className="container">
       <h2>Phonebook</h2>
       <ContactForm />
       <SearchBox />

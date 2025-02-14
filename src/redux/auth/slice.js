@@ -26,16 +26,10 @@ const slice = createSlice({
         state.token = action.payload.token;
         state.isLoggedIn = true;
       })
-      .addCase(logout.fulfilled, (state) => {
-        state.user = initialState.user;
-        state.token = initialState.token;
-        state.isLoggedIn = false;
+      .addCase(logout.fulfilled, () => {
+        return initialState;
       })
-      .addCase(refreshUser.fulfilled, (state, action) => {
-        state.user = action.payload;
-        state.isLoggedIn = true;
-        state.isRefreshing = false;
-      });
+      .addCase(refreshUser.fulfilled, (state, action) => {});
   },
 });
 
