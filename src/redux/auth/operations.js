@@ -9,6 +9,10 @@ const setAuthHeader = (token) => {
   goITApi.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 };
 
+const clearAuthHeader = () => {
+  goITApi.defaults.headers.common["Authorization"] = "";
+};
+
 export const register = createAsyncThunk(
   "auth/register",
   async (credentials, thunkAPI) => {
@@ -40,6 +44,7 @@ export const login = createAsyncThunk(
 export const logout = createAsyncThunk("auth/logout", async (_, thunkAPI) => {
   try {
     await goITApi.post("/users/logout");
+    clearAuthHeader();
   } catch (error) {
     console.error("Logout Error:", error);
     return thunkAPI.rejectWithValue(error.message);
