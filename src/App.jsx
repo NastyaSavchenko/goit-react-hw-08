@@ -6,8 +6,17 @@ import RegistrationPage from "./pages/RegistrationPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import ContactsPage from "./pages/ContactsPage.jsx";
 import NotFoundPage from "./pages/NotFoundPage.jsx";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { refreshUser } from "./redux/auth/operations.js";
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(refreshUser());
+  }, [dispatch]);
+
   return (
     <Routes>
       <Route path="/" element={<Layout />}>

@@ -30,7 +30,8 @@ const slice = createSlice({
         return initialState;
       })
       .addCase(refreshUser.fulfilled, (state, action) => {
-        state.user = action.payload;
+        state.user.name = action.payload.name;
+        state.user.email = action.payload.email;
         state.isLoggedIn = true;
         state.isRefreshing = false;
       });
