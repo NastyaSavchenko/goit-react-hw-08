@@ -1,17 +1,17 @@
 import { Route, Routes } from "react-router-dom";
-import Layout from "./components/Layout/Layout.jsx";
-
-import HomePage from "./pages/HomePage.jsx";
-import RegistrationPage from "./pages/RegistrationPage.jsx";
-import LoginPage from "./pages/LoginPage.jsx";
-import ContactsPage from "./pages/ContactsPage.jsx";
-import NotFoundPage from "./pages/NotFoundPage.jsx";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { lazy, useEffect } from "react";
 import { refreshUser } from "./redux/auth/operations.js";
 import { isRefreshingSelector } from "./redux/auth/selectors.js";
+import Layout from "./components/Layout/Layout.jsx";
+import NotFoundPage from "./pages/NotFoundPage.jsx";
+import { useDispatch, useSelector } from "react-redux";
 import PrivateRoute from "./components/PrivateRoute.jsx";
 import RestrictedRoute from "./components/RestrictedRoute.jsx";
+
+const Home = lazy(() => import("./pages/HomePage.jsx"));
+const Registration = lazy(() => import("./pages/RegistrationPage.jsx"));
+const Login = lazy(() => import("./pages/LoginPage.jsx"));
+const Contacts = lazy(() => import("./pages/ContactsPage.jsx"));
 
 function App() {
   const dispatch = useDispatch();
@@ -24,12 +24,12 @@ function App() {
   return isRefreshing ? null : (
     <Routes>
       <Route path="/" element={<Layout />}>
-        <Route index element={<HomePage />} />
+        <Route index element={<Home />} />
         <Route
           path="/contacts"
           element={
             <PrivateRoute>
-              <ContactsPage />
+              <Contacts />
             </PrivateRoute>
           }
         />
@@ -38,7 +38,7 @@ function App() {
         path="/register"
         element={
           <RestrictedRoute>
-            <RegistrationPage />
+            <Registration />
           </RestrictedRoute>
         }
       />
@@ -46,7 +46,7 @@ function App() {
         path="/login"
         element={
           <RestrictedRoute>
-            <LoginPage />
+            <Login />
           </RestrictedRoute>
         }
       />
