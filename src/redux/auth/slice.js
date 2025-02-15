@@ -1,4 +1,4 @@
-import { createSlice, isAnyOf } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { refreshUser, logout, login, register } from "./operations";
 
 const initialState = {
@@ -29,7 +29,11 @@ const slice = createSlice({
       .addCase(logout.fulfilled, () => {
         return initialState;
       })
-      .addCase(refreshUser.fulfilled, (state, action) => {});
+      .addCase(refreshUser.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.isLoggedIn = true;
+        state.isRefreshing = false;
+      });
   },
 });
 
