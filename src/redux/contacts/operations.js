@@ -8,7 +8,6 @@ export const fetchContacts = createAsyncThunk(
       const { data } = await goITApi.get("/contacts");
       return data;
     } catch (error) {
-      console.log(error);
       return thunkAPI.rejectWithValue(error.message);
     }
   }
